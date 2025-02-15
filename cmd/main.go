@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/daioru/url-shortener/internal/config"
+	"github.com/daioru/url-shortener/internal/pkg/db"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,7 +16,23 @@ func main() {
 	r.POST("/shorten", shortenURL)
 	r.GET("/:short", redirectURL)
 
-	fmt.Println("Server running on: 8080")
+	if err := config.ReadConfigYML("config.yml"); err != nil {
+		log.Fatal("Failed init configuration")
+	}
+	cfg := config.GetConfigInstance()
+
+	db, err := db.ConnectDB(&cfg.DB)
+	if err != nil {
+		log.Fatalf("sqlx_Open error: %v", err)
+	}
+	defer db.Close()
+
+	err = db.Ping()
+	if err != nil {
+		log.Fatalf("Error testing db connection: %v", err)
+	}
+
+    fmt.Println("Server running on: 8080")
 	log.Fatal(r.Run(":8080"))
 }
 
