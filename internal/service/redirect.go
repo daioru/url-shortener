@@ -3,7 +3,6 @@ package service
 import (
 	"net/http"
 
-	"github.com/Masterminds/squirrel"
 	sq "github.com/Masterminds/squirrel"
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +13,7 @@ func (s *Service) RedirectURL(c *gin.Context) {
 	query, args, _ := sq.Select("original").
 		PlaceholderFormat(sq.Dollar).
 		From("urls").
-		Where(squirrel.Eq{"short": short}).
+		Where(sq.Eq{"short": short}).
 		ToSql()
 
 	var originalURL string
