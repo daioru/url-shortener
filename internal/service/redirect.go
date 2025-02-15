@@ -1,23 +1,20 @@
 package service
 
 import (
+	"context"
 	"net/http"
+	"time"
 
-	sq "github.com/Masterminds/squirrel"
 	"github.com/gin-gonic/gin"
 )
 
 func (s *Service) RedirectURL(c *gin.Context) {
-	short := c.Param("short")
+	shortURL := c.Param("short")
 
-	query, args, _ := sq.Select("original").
-		PlaceholderFormat(sq.Dollar).
-		From("urls").
-		Where(sq.Eq{"short": short}).
-		ToSql()
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
 
-	var originalURL string
-	err := s.DB.Get(&originalURL, query, args...)
+	originalURL, err := s.repo.GetOriginalURL(ctx, shortURL)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "URL not found"})
 		return

@@ -1,19 +1,12 @@
 package service
 
 import (
-	"crypto/rand"
-	"encoding/base64"
+	"context"
 	"net/http"
+	"time"
 
-	sq "github.com/Masterminds/squirrel"
 	"github.com/gin-gonic/gin"
 )
-
-func generateShortURL() string {
-	b := make([]byte, 6)
-	rand.Read(b)
-	return base64.URLEncoding.EncodeToString(b)[:6]
-}
 
 func (s *Service) ShortenURL(c *gin.Context) {
 	var req struct {
@@ -24,19 +17,16 @@ func (s *Service) ShortenURL(c *gin.Context) {
 		return
 	}
 
-	short := generateShortURL()
+	shortURL := generateShortURL()
 
-	query, args, _ := sq.Insert("urls").
-		PlaceholderFormat(sq.Dollar).
-		Columns("short", "original").
-		Values(short, req.URL).
-		ToSql()
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
 
-	_, err := s.DB.Exec(query, args...)
+	id, err := s.repo.SaveShortURL(ctx, req.URL, shortURL)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save URL", "message": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"short_url": "http://localhost:8080/" + short})
+	c.JSON(http.StatusOK, gin.H{"short_url": "http://localhost:8080/" + shortURL, "id": id})
 }
