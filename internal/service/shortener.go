@@ -8,6 +8,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// ShortenRequest описывает тело запроса для создания короткого URL
+type ShortenRequest struct {
+	URL string `json:"url" binding:"required"`
+}
+
+// @Summary Создать короткий URL
+// @Description Принимает оригинальный URL и возвращает сокращённый
+// @Accept  json
+// @Produce  json
+// @Param request body ShortenRequest true "URL для сокращения"
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /shorten [post]
 func (s *Service) ShortenURL(c *gin.Context) {
 	var req struct {
 		URL string `json:"url" binding:"required"`

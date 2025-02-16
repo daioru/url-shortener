@@ -1,0 +1,72 @@
+basePath: /
+definitions:
+  service.ShortenRequest:
+    properties:
+      url:
+        type: string
+    required:
+    - url
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API для сокращения URL
+  title: URL Shortener API
+  version: "1.0"
+paths:
+  /{short}:
+    get:
+      description: Перенаправляет пользователя на оригинальный URL
+      parameters:
+      - description: Короткий URL
+        in: path
+        name: short
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "301":
+          description: Moved Permanently
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Перенаправление по короткому URL
+  /shorten:
+    post:
+      consumes:
+      - application/json
+      description: Принимает оригинальный URL и возвращает сокращённый
+      parameters:
+      - description: URL для сокращения
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/service.ShortenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Создать короткий URL
+swagger: "2.0"

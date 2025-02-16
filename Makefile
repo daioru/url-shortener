@@ -5,3 +5,7 @@ run:
 .PHONY: .migrate
 migrate:
 	go run internal/migrations/main.go
+
+.PHONY: .swag
+swag:
+	swag init -d cmd,internal/service

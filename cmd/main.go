@@ -9,8 +9,18 @@ import (
 	"github.com/daioru/url-shortener/internal/config"
 	"github.com/daioru/url-shortener/internal/pkg/db"
 	"github.com/gin-gonic/gin"
+
+	files "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
+	_ "github.com/daioru/url-shortener/docs" // Пакет с документацией
 )
 
+// @title URL Shortener API
+// @version 1.0
+// @description API для сокращения URL
+// @host localhost:8080
+// @BasePath /
 func main() {
 	if err := config.ReadConfigYML("config.yml"); err != nil {
 		log.Fatal("Failed init configuration")
@@ -31,6 +41,8 @@ func main() {
 	service := service.NewService(db)
 
 	r := gin.Default()
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(files.Handler))
 
 	r.POST("/shorten", service.ShortenURL)
 	r.GET("/:short", service.RedirectURL)

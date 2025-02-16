@@ -8,6 +8,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Перенаправление по короткому URL
+// @Description Перенаправляет пользователя на оригинальный URL
+// @Produce  json
+// @Param short path string true "Короткий URL"
+// @Success 301
+// @Failure 404 {object} map[string]string
+// @Router /{short} [get]
 func (s *Service) RedirectURL(c *gin.Context) {
 	shortURL := c.Param("short")
 
