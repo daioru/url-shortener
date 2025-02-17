@@ -1,11 +1,11 @@
 .PHONY: .run
 run:
-	go run cmd/main.go
+	go run cmd/url-shortener/main.go
 
 .PHONY: .migrate
 migrate:
-	go run internal/migrations/main.go
+	go run cmd/migration/main.go
 
 .PHONY: .swag
 swag:
-	swag init -d cmd,internal/service
+	swag init -d cmd/url-shortener,internal/service
