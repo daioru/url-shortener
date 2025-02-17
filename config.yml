@@ -1,5 +1,5 @@
 db:
-  DSN: "postgres://user:password@localhost:5432/url_shortener"
+  DSN: "postgres://user:password@postgres_container:5432/url_shortener"
   maxOpenConns: 5
   maxIdleConns: 5
   connMaxIdleTime: 5m

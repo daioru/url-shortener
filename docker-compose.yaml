@@ -1,5 +1,15 @@
 version: "3.9"
 services:
+  app:
+    build: .
+    container_name: url-shortener-app
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    networks:
+      - app_network
+
   postgres:
     container_name: postgres_container
     image: postgres:17.2
@@ -14,8 +24,8 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
-      - postgres
-  
+      - app_network
+
   pgadmin:
     container_name: pgadmin_container
     image: dpage/pgadmin4:7.2
@@ -34,12 +44,13 @@ services:
           cpus: '0.5'
           memory: 1G
     networks:
-      - postgres
+      - app_network
 
 volumes:
   pgdata:
   pgadmin-data:
 
+
 networks:
-  postgres:
+  app_network:
     driver: bridge
