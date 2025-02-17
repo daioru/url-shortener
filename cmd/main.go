@@ -41,6 +41,7 @@ func main() {
 	service := service.NewService(db)
 
 	r := gin.Default()
+	r.SetTrustedProxies(nil)
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(files.Handler))
 
