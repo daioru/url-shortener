@@ -29,27 +29,6 @@ info:
   title: URL Shortener API
   version: "1.0"
 paths:
-  /{short}:
-    get:
-      description: Перенаправляет пользователя на оригинальный URL
-      parameters:
-      - description: Короткий URL
-        in: path
-        name: short
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "301":
-          description: Moved Permanently
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Перенаправление по короткому URL
   /shorten:
     post:
       consumes:

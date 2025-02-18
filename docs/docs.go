@@ -57,38 +57,6 @@ const docTemplate = `{
                     }
                 }
             }
-        },
-        "/{short}": {
-            "get": {
-                "description": "Перенаправляет пользователя на оригинальный URL",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Перенаправление по короткому URL",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Короткий URL",
-                        "name": "short",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "301": {
-                        "description": "Moved Permanently"
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
