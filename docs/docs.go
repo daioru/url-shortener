@@ -38,30 +38,21 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Успешный ответ с сокращённым URL",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/service.ShortenResponse"
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "Ошибка валидации",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/service.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "Internal Server Error",
+                        "description": "Ошибка сервера",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/service.ErrorResponse"
                         }
                     }
                 }
@@ -101,6 +92,18 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "service.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "description": "Оставляем пустым, если нет доп. сообщения",
+                    "type": "string"
+                }
+            }
+        },
         "service.ShortenRequest": {
             "type": "object",
             "required": [
@@ -111,6 +114,17 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "service.ShortenResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "short_url": {
+                    "type": "string"
+                }
+            }
         }
     }
 }`
@@ -118,7 +132,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
+	Host:             "172.27.227.76:8080",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "URL Shortener API",

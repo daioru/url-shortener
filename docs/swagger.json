@@ -6,7 +6,7 @@
         "contact": {},
         "version": "1.0"
     },
-    "host": "localhost:8080",
+    "host": "172.27.227.76:8080",
     "basePath": "/",
     "paths": {
         "/shorten": {
@@ -32,30 +32,21 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Успешный ответ с сокращённым URL",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/service.ShortenResponse"
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "Ошибка валидации",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/service.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "Internal Server Error",
+                        "description": "Ошибка сервера",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/service.ErrorResponse"
                         }
                     }
                 }
@@ -95,6 +86,18 @@
         }
     },
     "definitions": {
+        "service.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "description": "Оставляем пустым, если нет доп. сообщения",
+                    "type": "string"
+                }
+            }
+        },
         "service.ShortenRequest": {
             "type": "object",
             "required": [
@@ -102,6 +105,17 @@
             ],
             "properties": {
                 "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.ShortenResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "short_url": {
                     "type": "string"
                 }
             }

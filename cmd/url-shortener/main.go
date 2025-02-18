@@ -20,7 +20,7 @@ import (
 // @title URL Shortener API
 // @version 1.0
 // @description API для сокращения URL
-// @host localhost:8080
+// @host 172.27.227.76:8080
 // @BasePath /
 func main() {
 	if err := config.ReadConfigYML("config.yml"); err != nil {

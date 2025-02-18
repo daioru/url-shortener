@@ -13,21 +13,33 @@ type ShortenRequest struct {
 	URL string `json:"url" binding:"required"`
 }
 
+// ShortenResponse описывает успешный ответ
+type ShortenResponse struct {
+	ShortURL string `json:"short_url"`
+	ID       int    `json:"id"`
+}
+
+// ErrorResponse описывает ошибочный ответ
+type ErrorResponse struct {
+	Error   string `json:"error"`
+	Message string `json:"message,omitempty"` // Оставляем пустым, если нет доп. сообщения
+}
+
 // @Summary Создать короткий URL
 // @Description Принимает оригинальный URL и возвращает сокращённый
 // @Accept  json
 // @Produce  json
 // @Param request body ShortenRequest true "URL для сокращения"
-// @Success 200 {object} map[string]string
-// @Failure 400 {object} map[string]string
-// @Failure 500 {object} map[string]string
+// @Success 200 {object} ShortenResponse "Успешный ответ с сокращённым URL"
+// @Failure 400 {object} ErrorResponse "Ошибка валидации"
+// @Failure 500 {object} ErrorResponse "Ошибка сервера"
 // @Router /shorten [post]
 func (s *Service) ShortenURL(c *gin.Context) {
 	var req struct {
 		URL string `json:"url" binding:"required"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to parse request parameters", "message": err.Error()})
 		return
 	}
 

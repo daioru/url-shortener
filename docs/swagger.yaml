@@ -1,5 +1,13 @@
 basePath: /
 definitions:
+  service.ErrorResponse:
+    properties:
+      error:
+        type: string
+      message:
+        description: Оставляем пустым, если нет доп. сообщения
+        type: string
+    type: object
   service.ShortenRequest:
     properties:
       url:
@@ -7,7 +15,14 @@ definitions:
     required:
     - url
     type: object
-host: localhost:8080
+  service.ShortenResponse:
+    properties:
+      id:
+        type: integer
+      short_url:
+        type: string
+    type: object
+host: 172.27.227.76:8080
 info:
   contact: {}
   description: API для сокращения URL
@@ -51,22 +66,16 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: Успешный ответ с сокращённым URL
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/service.ShortenResponse'
         "400":
-          description: Bad Request
+          description: Ошибка валидации
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/service.ErrorResponse'
         "500":
-          description: Internal Server Error
+          description: Ошибка сервера
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/service.ErrorResponse'
       summary: Создать короткий URL
 swagger: "2.0"
