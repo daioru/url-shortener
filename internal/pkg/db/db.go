@@ -8,15 +8,15 @@ import (
 )
 
 type Config interface {
-	GetDSN() string // Data Source Name
+	GetDSN(bool) string // Data Source Name
 	GetMaxOpenConns() int
 	GetMaxIdleConns() int
 	GetConnMaxIdleTime() time.Duration
 	GetConnMaxLifetime() time.Duration
 }
 
-func ConnectDB(cfg Config) (*sqlx.DB, error) {
-	db, err := sqlx.Open("pgx", cfg.GetDSN())
+func ConnectDB(cfg Config, standalone bool) (*sqlx.DB, error) {
+	db, err := sqlx.Open("pgx", cfg.GetDSN(standalone))
 
 	if err != nil {
 		return nil, err

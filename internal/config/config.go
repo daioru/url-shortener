@@ -10,15 +10,19 @@ import (
 var cfg *Config
 
 type DB struct {
-	DSN             string        `yaml:"DSN"`
+	DockerDSN       string        `yaml:"DockerDSN"`
+	StandaloneDSN   string        `yaml:"StandaloneDSN"`
 	MaxOpenConns    int           `yaml:"maxOpenConns"`
 	MaxIdleConns    int           `yaml:"MaxIdleConns"`
 	ConnMaxIdleTime time.Duration `yaml:"connMaxIdleTime"`
 	ConnMaxLifetime time.Duration `yaml:"connMaxLifetime"`
 }
 
-func (db *DB) GetDSN() string {
-	return db.DSN
+func (db *DB) GetDSN(standalone bool) string {
+	if standalone {
+		return db.StandaloneDSN
+	}
+	return db.DockerDSN
 }
 
 func (db *DB) GetMaxOpenConns() int {

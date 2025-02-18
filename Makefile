@@ -1,6 +1,6 @@
 .PHONY: .run
 run:
-	go run cmd/url-shortener/main.go
+	go run cmd/url-shortener/main.go -standalone
 
 .PHONY: .migrate
 migrate:

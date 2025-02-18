@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 
@@ -27,7 +28,10 @@ func main() {
 	}
 	cfg := config.GetConfigInstance()
 
-	db, err := db.ConnectDB(&cfg.DB)
+	standalone := flag.Bool("standalone", false, "Used to connect to postgres when running outside of a container")
+	flag.Parse()
+
+	db, err := db.ConnectDB(&cfg.DB, *standalone)
 	if err != nil {
 		log.Fatalf("sqlx_Open error: %v", err)
 	}

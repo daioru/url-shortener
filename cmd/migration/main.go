@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"time"
 
 	"github.com/daioru/url-shortener/internal/config"
@@ -14,12 +15,18 @@ import (
 )
 
 func main() {
+	var standalone bool
+	flag.BoolVar(&standalone, "standalone", false, "Used to connect to postgres when running outside of a container")
+
+	// After declaring all the flags, enable command-line flag parsing:
+	flag.Parse()
+
 	if err := config.ReadConfigYML("config.yml"); err != nil {
 		log.Fatal().Err(err).Msg("Failed init configuration")
 	}
 	cfg := config.GetConfigInstance()
 
-	conn, err := db.ConnectDB(&cfg.DB)
+	conn, err := db.ConnectDB(&cfg.DB, standalone)
 	if err != nil {
 		log.Fatal().Err(err).Msg("sql.Open() error")
 	}
